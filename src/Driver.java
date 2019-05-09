@@ -42,9 +42,9 @@ public class Driver {
             input.close();
 
             Algorithm a1 = new Algorithm(itemList, capacity, items);
-            Node best = a1.findBestNode();
+            a1.findBestNode();
 
-            System.out.println("\nBest node: " + best.toString());
+            System.out.println("\nBest node: " + a1.getBest().toString());
         } catch (NumberFormatException e){
             System.out.println("File " + fileName + " is empty.");
         } catch (Exception e){

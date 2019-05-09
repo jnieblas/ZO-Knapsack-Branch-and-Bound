@@ -1,18 +1,21 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Node {
+public class Node{
     private int num, level, profit, weight;
     private double bound;
     private ArrayList<Integer> items;
+    private ArrayList<Integer> excludedItems;
 
-    public Node(int nodeNum, int level, ArrayList<Integer> items){
+    public Node(int nodeNum, int level, ArrayList<Integer> items,
+                ArrayList<Integer> excludedItems){
         this.num = nodeNum;
         this.level = level;
         this.profit = 0;
         this.weight = 0;
         this.bound = 0.0;
         this.items = items;
+        this.excludedItems = excludedItems;
     }
 
     public void setProfitWeight(HashMap<Integer, Item> itemsMap){
@@ -23,11 +26,7 @@ public class Node {
         }
     }
 
-    public void addItem(int i){
-        this.items.add(i);
-    }
-
-    public void setBound(int capacity, int numItems, HashMap<Integer, Item> itemList){
+    public void setBound(int capacity, int numItems, HashMap<Integer, Item> itemsMap){
         int runningWeight = this.weight;
         int totalProfit = this.profit;
 
@@ -37,8 +36,8 @@ public class Node {
         }
 
         for(int i = 1; i <= numItems; i++){
-            if(!this.items.contains(i)){
-                Item item = itemList.get(i);
+            if(!this.items.contains(i) && !this.excludedItems.contains(i)){
+                Item item = itemsMap.get(i);
                 runningWeight += item.getWeight();
 
                 if(runningWeight > capacity){
@@ -55,9 +54,21 @@ public class Node {
         this.bound = totalProfit;
     }
 
+    public void addItem(int i){
+        this.items.add(i);
+    }
+
+    public void addExcludedItem(int i) { this.excludedItems.add(i); }
+
     public String toString(){
         return String.format("<Node %d:   items: %s level: %d profit: %d weight: %d bound: %.1f>",
                 this.num, this.items.toString(), this.level, this.profit, this.weight, this.bound);
+    }
+
+    public Node getChildNode(int index){
+        return new Node(index, this.getLevel() + 1,
+                (ArrayList<Integer>) this.getItems().clone(),
+                (ArrayList<Integer>) this.getExcludedItems().clone());
     }
 
     public int getNum(){
@@ -83,4 +94,6 @@ public class Node {
     public ArrayList<Integer> getItems(){
         return this.items;
     }
+
+    public ArrayList<Integer> getExcludedItems() { return this.excludedItems; }
 }
