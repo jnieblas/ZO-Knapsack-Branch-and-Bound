@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -26,7 +25,7 @@ public class Driver {
             int capacity = Integer.parseInt(input.readLine());
             int items = Integer.parseInt(input.readLine());
 
-            System.out.println("Capacity of knapsack is " + capacity);
+            System.out.println("\nCapacity of knapsack is " + capacity);
             System.out.println("Items are:");
 
             for(int i = 1; i <= items; i++){
@@ -44,10 +43,11 @@ public class Driver {
 
             Algorithm a1 = new Algorithm(itemList, capacity, items);
             Node best = a1.findBestNode();
+
             System.out.println("\nBest node: " + best.toString());
         } catch (NumberFormatException e){
             System.out.println("File " + fileName + " is empty.");
-        } catch (IOException e){
+        } catch (Exception e){
             System.out.println(e);
         }
     }

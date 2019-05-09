@@ -2,9 +2,9 @@ public class Item {
     private int profit;
     private int weight;
 
-    public Item(int p, int w){
-        this.profit = p;
-        this.weight = w;
+    public Item(int profit, int weight){
+        this.profit = profit;
+        this.weight = weight;
     }
 
     public int getProfit(){

@@ -1,17 +1,58 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Node {
     private int num, level, profit, weight;
     private double bound;
     private ArrayList<Integer> items;
 
-    public Node(int n, int l){
-        this.num = n;
-        this.level = l;
+    public Node(int nodeNum, int level, ArrayList<Integer> items){
+        this.num = nodeNum;
+        this.level = level;
         this.profit = 0;
         this.weight = 0;
         this.bound = 0.0;
-        items = new ArrayList<>();
+        this.items = items;
+    }
+
+    public void setProfitWeight(HashMap<Integer, Item> itemsMap){
+        for(int i : this.items){
+            Item item = itemsMap.get(i);
+            this.profit += item.getProfit();
+            this.weight += item.getWeight();
+        }
+    }
+
+    public void addItem(int i){
+        this.items.add(i);
+    }
+
+    public void setBound(int capacity, int numItems, HashMap<Integer, Item> itemList){
+        int runningWeight = this.weight;
+        int totalProfit = this.profit;
+
+        if(runningWeight >= capacity){
+            this.bound = totalProfit;
+            return;
+        }
+
+        for(int i = 1; i <= numItems; i++){
+            if(!this.items.contains(i)){
+                Item item = itemList.get(i);
+                runningWeight += item.getWeight();
+
+                if(runningWeight > capacity){
+                    // profit per weight unit * units that fit into capacity
+                    totalProfit += ((double) item.getProfit() / item.getWeight())
+                            * (item.getWeight() - (runningWeight - capacity));
+                    break;
+                }
+
+                totalProfit += item.getProfit();
+            }
+        }
+
+        this.bound = totalProfit;
     }
 
     public String toString(){
